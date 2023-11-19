@@ -9,6 +9,7 @@ class GeneralPage extends StatefulWidget {
 }
 
 class _GeneralPageState extends State<GeneralPage> {
+  final colors=[Colors.red,Colors.green,Colors.yellow,Colors.cyan];
   String selectedValue = 'Option 1';
   List<String> options = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
   String defaultReply="0";
@@ -26,27 +27,12 @@ class _GeneralPageState extends State<GeneralPage> {
   String conversation="1";
   String button="1";
   String keyboard="1";
+  bool isDynamicChecked=false;
+  bool nudge1=false;
+  bool nudge2=false;
+  bool lastCheckbox=false;
   var controller=TextEditingController(text: "18-11-23");
   var subjectController=TextEditingController();
-
-  List<String> items = [
-    '0',
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -385,6 +371,7 @@ class _GeneralPageState extends State<GeneralPage> {
 
              //dynamic email
              Row(
+               mainAxisAlignment: MainAxisAlignment.start,
                crossAxisAlignment: CrossAxisAlignment.start,
                children: [
                  Column(children: [
@@ -394,8 +381,23 @@ class _GeneralPageState extends State<GeneralPage> {
                  ),
                  SizedBox(width: 30,),
                  Column(
+                   mainAxisAlignment: MainAxisAlignment.start,
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: isDynamicChecked,
+                            onChanged: (value) {
+                              setState(() {
+                                isDynamicChecked = value!;
+                              });
+                            },
+                          ),
+                          Text("Enable dynamic email"),
+                          Text(" -Display dynamic email content when available",style: TextStyle(fontSize: 13,fontWeight: FontWeight.normal),),
+                        ],
+                      ),
                      Text("Developer settings",style: TextStyle(color: Colors.blue,fontWeight: FontWeight.normal),)
                    ],
                  )
@@ -581,18 +583,18 @@ class _GeneralPageState extends State<GeneralPage> {
                mainAxisAlignment: MainAxisAlignment.start,
                children: [
                  Column(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   crossAxisAlignment: CrossAxisAlignment.center,
+                   mainAxisAlignment: MainAxisAlignment.start,
+                   crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
                      Text("Conversation view:"),
                      SizedBox(height: 1,),
                      Text("(sets whether emails of the same topic",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
-                     Text("sets whether emails of the same topic are grouped together)",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
+                     Text(" are grouped together)",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
                    ],
                  ),
                  SizedBox(width: 30,),
                  Column(
-                   mainAxisAlignment: MainAxisAlignment.center,
+                   mainAxisAlignment: MainAxisAlignment.start,
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
                      RadioMenuButton(value: "1", groupValue: conversation, onChanged: (val){
@@ -612,6 +614,59 @@ class _GeneralPageState extends State<GeneralPage> {
              ),
              Divider(),
              //Nudges
+             SingleChildScrollView(
+               scrollDirection: Axis.horizontal,
+               child: Row(
+                 mainAxisAlignment: MainAxisAlignment.start,
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                   Column(children: [
+                     Text("Nudges:"),
+                     Text("Learn more",style: TextStyle(color: Color(0xFF3055cc),fontSize: 13),),
+                   ],
+                   ),
+                   SizedBox(width: 30,),
+                   Column(
+                     mainAxisAlignment: MainAxisAlignment.start,
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       Container(
+                         child: Row(
+                           children: [
+                             Checkbox(
+                               value: nudge1,
+                               onChanged: (value) {
+                                 setState(() {
+                                   nudge1 = value!;
+                                 });
+                               },
+                             ),
+                             Text("Suggest emails to reply to "),
+                             Text(" -Emails that you might have forgotten to respond to will appear at the top of your inbox",style: TextStyle(fontSize: 13,fontWeight: FontWeight.normal),),
+                           ],
+                         ),
+                       ),
+                       Row(
+                         children: [
+                           Checkbox(
+                             value: nudge2,
+                             onChanged: (value) {
+                               setState(() {
+                                 nudge2 = value!;
+                               });
+                             },
+                           ),
+                           Text("Suggest emails to follow up on"),
+                           Text(" -Sent emails that you might need to follow up on will appear at the top of your inbox",style: TextStyle(fontSize: 13,fontWeight: FontWeight.normal),),
+                         ],
+                       ),
+                     ],
+                   )
+                 ],
+               ),
+             ),
+             Divider(),
+
 
              //smart reply
              Row(
@@ -621,10 +676,10 @@ class _GeneralPageState extends State<GeneralPage> {
                    mainAxisAlignment: MainAxisAlignment.center,
                    crossAxisAlignment: CrossAxisAlignment.center,
                    children: [
-                     Text("Smart Compose:"),
+                     Text("Smart Reply:"),
                      SizedBox(height: 1,),
-                     Text("(predictive writing suggestions appear",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
-                     Text("as you compose an email)",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
+                     Text("(Show suggested replies when",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
+                     Text("available)",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
                    ],
                  ),
                  SizedBox(width: 30,),
@@ -636,13 +691,13 @@ class _GeneralPageState extends State<GeneralPage> {
                        setState(() {
                          suggestion=val!;
                        });
-                     }, child: Text("Writing suggestions on",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
+                     }, child: Text("Smart Reply on",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
                      RadioMenuButton(style: ButtonStyle(iconColor: MaterialStateProperty.all<Color>(Colors.blue), ),
                          value: "2", groupValue: suggestion, onChanged: (val){
                            setState(() {
                              suggestion=val!;
                            });
-                         }, child:Text("Writing suggestions off",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
+                         }, child:Text("Smart Reply off",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
                    ],
                  ),
                ],
@@ -661,37 +716,42 @@ class _GeneralPageState extends State<GeneralPage> {
                children: [
                  Text("Stars"),
                  SizedBox(width: 50,),
-                 Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                     Text("Drag the stars between the lists.The stars will rotate in the order shown below when you click successively. To learn the name of a star for search, hover your mouse over the image.",overflow: TextOverflow.visible,),
-                      SizedBox(height: 4,),
-                     Row(),
-                     SizedBox(height: 4,),
-                     Row(
+                 Expanded(
+                   child: Container(
+                     child: Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
                        children: [
-                         Text("In use:"),
-                         SizedBox(width: 20,),
-                         Icon(Icons.star,color: Colors.yellow,)
-                       ],
-                     ),
-                     Row(
-                       children: [
-                         Text("Not in use:"),
-                         SizedBox(width: 10,),
+                         Text("Drag the stars between the lists.The stars will rotate in the order shown below when you click successively. To learn the name of a star for search, hover your mouse over the image.",overflow: TextOverflow.visible,),
+                          SizedBox(height: 4,),
+                         Row(),
+                         SizedBox(height: 4,),
                          Row(
                            children: [
-                             Icon(Icons.star),
-                             Icon(Icons.star,color:Colors.blue),
-                             Icon(Icons.star,color:Colors.red),
-                             Icon(Icons.star,color:Colors.green),
-                             Icon(Icons.star,color:Colors.cyan),
+                             Text("In use:"),
+                             SizedBox(width: 20,),
+                             Container(
+                               height: 23,
+                               width: 200,
+                               child: _createContents(2),
+                             )
                            ],
-                         )
+                         ),
+                         SizedBox(height: 10,),
+                         Row(
+                           children: [
+                             Text("Not in use:"),
+                             SizedBox(width: 10,),
+                             Container(
+                               height: 23,
+                               width: 200,
+                               child: _createContents(6),
+                             ),
+                           ],
+                         ),
+
                        ],
                      ),
-
-                   ],
+                   ),
                  )
                ],
              ),
@@ -766,36 +826,69 @@ class _GeneralPageState extends State<GeneralPage> {
              Divider(),
 
              // my picture
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      Text("My picture"),
+                      SizedBox(height: 10,),
+                      Text("Learn more",style: TextStyle(color: Color(0xFF3055cc)),),
+                    ],
+                  ),
+                  SizedBox(width: 30,),
+                  Row(
 
+                    children: [
+                      CircleAvatar(
+                        radius: 30.0, // Adjust the radius as needed
+                        backgroundImage: AssetImage('assets/your_image.jpg'), // Replace with your image asset
+                      ),
+                      SizedBox(width: 10,),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Your Google profile picture is visible across Google services.",style: TextStyle(fontWeight: FontWeight.normal),),
+                          Text("You can change your picture in About me.",style: TextStyle(fontWeight: FontWeight.normal),),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+             Divider(),
              //create contacts
-             Row(
-               children: [
-                 Column(
-                   mainAxisAlignment: MainAxisAlignment.start,
-                   children: [
-                     Text("Create contacts for auto-complete:"),
-                     SizedBox(height: 3,),
-                   ],
-                 ),
-                 SizedBox(width: 30,),
-                 Column(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                     RadioMenuButton(value: "1", groupValue: contact, onChanged: (val){
-                       setState(() {
-                         contact=val!;
-                       });
-                     }, child: Text("When I send a message to a new person, add them to Other Contacts so that I can auto-complete to them next time",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
-                     RadioMenuButton(style: ButtonStyle(iconColor: MaterialStateProperty.all<Color>(Colors.blue), ),
-                         value: "2", groupValue: contact, onChanged: (val){
-                           setState(() {
-                             contact=val!;
-                           });
-                         }, child: Text("I'll add contacts myself",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
-                   ],
-                 ),
-               ],
+             SingleChildScrollView(
+               scrollDirection: Axis.horizontal,
+               child: Row(
+                 children: [
+                   Column(
+                     mainAxisAlignment: MainAxisAlignment.start,
+                     children: [
+                       Text("Create contacts for auto-complete:"),
+                       SizedBox(height: 3,),
+                     ],
+                   ),
+                   SizedBox(width: 30,),
+                   Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       RadioMenuButton(value: "1", groupValue: contact, onChanged: (val){
+                         setState(() {
+                           contact=val!;
+                         });
+                       }, child: Text("When I send a message to a new person, add them to Other Contacts ",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15),overflow: TextOverflow.ellipsis,maxLines: 1,)),
+                       RadioMenuButton(style: ButtonStyle(iconColor: MaterialStateProperty.all<Color>(Colors.blue), ),
+                           value: "2", groupValue: contact, onChanged: (val){
+                             setState(() {
+                               contact=val!;
+                             });
+                           }, child: Text("I'll add contacts myself",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
+                     ],
+                   ),
+                 ],
+               ),
              ),
              Divider(),
 
@@ -875,204 +968,207 @@ class _GeneralPageState extends State<GeneralPage> {
              ),
              Divider(),
              // out of office
-             Row(
-               mainAxisAlignment: MainAxisAlignment.start,
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Column(
-                   mainAxisAlignment: MainAxisAlignment.start,
-                   crossAxisAlignment: CrossAxisAlignment.center,
-                   children: [
-                     Text("Out-of-Office AutoReply:"),
-                     SizedBox(height: 1,),
-                     Text("(sends an automated reply to incoming messages",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
-                     Text(" If a contact sends you several messages)",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
-                   ],
-                 ),
-                 SizedBox(width: 30,),
-                 Column(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                     RadioMenuButton(value: "1", groupValue: suggestion, onChanged: (val){
-                       setState(() {
-                         suggestion=val!;
-                       });
-                     }, child: Text("Out of Office AutoReply off",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
-                     RadioMenuButton(style: ButtonStyle(iconColor: MaterialStateProperty.all<Color>(Colors.blue), ),
-                         value: "2", groupValue: suggestion, onChanged: (val){
-                           setState(() {
-                             suggestion=val!;
-                           });
-                         }, child:Text("Out of Office AutoReply on",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
-                      SizedBox(height: 3,),
-                      Row(
-                        children: [
-                          Text("First day:"),
-                          SizedBox(width: 10,),
-                          Container(
-                            width: 200,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.0),
-                              color: Colors.grey[200],
-                            ),
-                            child: TextField(
-                              controller: controller,
-                              textAlignVertical: TextAlignVertical.center,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(15.0),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                     SizedBox(height: 14,),
-                     Row(
-                       children: [
-                         Text("Subject:"),
-                         SizedBox(width: 10,),
-                         Container(
-                           width: 300,
-                           height: 30,
-                           decoration: BoxDecoration(
-                             borderRadius: BorderRadius.circular(4.0),
-                             color: Colors.grey[200],
-                           ),
-                           child: TextField(
-                             controller: subjectController,
-                             textAlignVertical: TextAlignVertical.center,
-                             decoration: InputDecoration(
-                               contentPadding: EdgeInsets.all(15.0),
-                               border: InputBorder.none,
-                             ),
-                           ),
-                         )
-                       ],
-                     ),
-                     SizedBox(height: 14,),
-                     Row(
-                       children: [
-                         Text("Message:"),
-                         SizedBox(width: 10,),
+             SingleChildScrollView(
+               scrollDirection: Axis.horizontal,
+               child: Row(
+                 mainAxisAlignment: MainAxisAlignment.start,
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                   Column(
+                     mainAxisAlignment: MainAxisAlignment.start,
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     children: [
+                       Text("Out-of-Office AutoReply:"),
+                       SizedBox(height: 1,),
+                       Text("(sends an automated reply to incoming messages",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
+                       Text(" If a contact sends you several messages)",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
+                     ],
+                   ),
+                   SizedBox(width: 30,),
+                   Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       RadioMenuButton(value: "1", groupValue: suggestion, onChanged: (val){
+                         setState(() {
+                           suggestion=val!;
+                         });
+                       }, child: Text("Out of Office AutoReply off",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
+                       RadioMenuButton(style: ButtonStyle(iconColor: MaterialStateProperty.all<Color>(Colors.blue), ),
+                           value: "2", groupValue: suggestion, onChanged: (val){
+                             setState(() {
+                               suggestion=val!;
+                             });
+                           }, child:Text("Out of Office AutoReply on",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
+                        SizedBox(height: 3,),
                         Row(
                           children: [
-                            DropdownButton(
-                              value: selectedValue,
-                              items: options.map((String value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  selectedValue = newValue!;
-                                });
-                              },
-                            ),
-                            DropdownButton(
-                              value: selectedValue,
-                              items: options.map((String value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  selectedValue = newValue!;
-                                });
-                              },
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(child: Text("B",style: TextStyle(fontWeight: FontWeight.bold),))),
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(child: Text("I",style: TextStyle(fontWeight: FontWeight.bold),))),
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(child: Text("U",style: TextStyle(fontWeight: FontWeight.bold),))),
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(child: Text("A",style: TextStyle(fontWeight: FontWeight.bold),))),
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(child: Icon(Icons.link))),
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(child: Icon(Icons.image))),
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(child: Icon(Icons.line_weight_sharp))),
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(child: Icon(Icons.line_style_sharp))),
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(),
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(child: Icon(Icons.format_quote))),
-                            ),
+                            Text("First day:"),
+                            SizedBox(width: 10,),
+                            Container(
+                              width: 200,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.0),
+                                color: Colors.grey[200],
+                              ),
+                              child: TextField(
+                                controller: controller,
+                                textAlignVertical: TextAlignVertical.center,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(15.0),
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            )
                           ],
                         ),
-                         SizedBox(height: 10,),
-                       ],
-                     ),
-                     Container(
-                       width: 600.0,
-                       height: 300.0,
-                       decoration: BoxDecoration(
-                         border: Border.all(color: Colors.black),
-                         borderRadius: BorderRadius.circular(10.0),
+                       SizedBox(height: 14,),
+                       Row(
+                         children: [
+                           Text("Subject:"),
+                           SizedBox(width: 10,),
+                           Container(
+                             width: 300,
+                             height: 30,
+                             decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(4.0),
+                               color: Colors.grey[200],
+                             ),
+                             child: TextField(
+                               controller: subjectController,
+                               textAlignVertical: TextAlignVertical.center,
+                               decoration: InputDecoration(
+                                 contentPadding: EdgeInsets.all(15.0),
+                                 border: InputBorder.none,
+                               ),
+                             ),
+                           )
+                         ],
                        ),
-                       child: TextField(
-                         controller: TextEditingController(),
-                         decoration: InputDecoration(
-                           hintText: 'Enter text',
-                           border: InputBorder.none,
-                           contentPadding: EdgeInsets.all(16.0),
+                       SizedBox(height: 14,),
+                       Row(
+                         children: [
+                           Text("Message:"),
+                           SizedBox(width: 10,),
+                          Row(
+                            children: [
+                              DropdownButton(
+                                value: selectedValue,
+                                items: options.map((String value) {
+                                  return DropdownMenuItem(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    selectedValue = newValue!;
+                                  });
+                                },
+                              ),
+                              DropdownButton(
+                                value: selectedValue,
+                                items: options.map((String value) {
+                                  return DropdownMenuItem(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    selectedValue = newValue!;
+                                  });
+                                },
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(),
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(child: Text("B",style: TextStyle(fontWeight: FontWeight.bold),))),
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(),
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(child: Text("I",style: TextStyle(fontWeight: FontWeight.bold),))),
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(),
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(child: Text("U",style: TextStyle(fontWeight: FontWeight.bold),))),
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(),
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(child: Text("A",style: TextStyle(fontWeight: FontWeight.bold),))),
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(),
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(child: Icon(Icons.link))),
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(),
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(child: Icon(Icons.image))),
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(),
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(child: Icon(Icons.line_weight_sharp))),
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(),
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(child: Icon(Icons.line_style_sharp))),
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(),
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(child: Icon(Icons.format_quote))),
+                              ),
+                            ],
+                          ),
+                           SizedBox(height: 10,),
+                         ],
+                       ),
+                       Container(
+                         width: 600.0,
+                         height: 300.0,
+                         decoration: BoxDecoration(
+                           border: Border.all(color: Colors.black),
+                           borderRadius: BorderRadius.circular(10.0),
                          ),
-                       ),
-                     )
-                   ],
-                 ),
-               ],
+                         child: TextField(
+                           controller: TextEditingController(),
+                           decoration: InputDecoration(
+                             hintText: 'Enter text',
+                             border: InputBorder.none,
+                             contentPadding: EdgeInsets.all(16.0),
+                           ),
+                         ),
+                       )
+                     ],
+                   ),
+                 ],
+               ),
              ),
 
              SizedBox(height: 10,),
@@ -1080,7 +1176,14 @@ class _GeneralPageState extends State<GeneralPage> {
                mainAxisAlignment: MainAxisAlignment.center,
                children: [
                  // checkBox
-                  Text("checkbox"),
+                 Checkbox(
+                   value: lastCheckbox,
+                   onChanged: (value) {
+                     setState(() {
+                       lastCheckbox = value!;
+                     });
+                   },
+                 ),
                  Text("Only send a response to people in my Contacts"),
                ],
              ),
@@ -1091,6 +1194,7 @@ class _GeneralPageState extends State<GeneralPage> {
                mainAxisAlignment: MainAxisAlignment.center,
                children: [
                  Card(
+                   elevation: 5,
                    shape: RoundedRectangleBorder(),
                    child: Container(
                      padding: EdgeInsets.all(2),
@@ -1099,6 +1203,7 @@ class _GeneralPageState extends State<GeneralPage> {
                  ),
                  SizedBox(width: 10,),
                  Card(
+                   elevation: 5,
                    shape: RoundedRectangleBorder(),
                    child: Container(
                        padding: EdgeInsets.all(2),
@@ -1113,5 +1218,34 @@ class _GeneralPageState extends State<GeneralPage> {
       ),
     );
 
+  }
+  Widget _createContents(int n) {
+    final listView = ListView.builder(
+      itemCount: n,
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) {
+        final data = Icon(Icons.star,color: colors[index%4],);
+
+        final draggable = Draggable(
+          child: _decorate(data),
+          feedback: Material(
+            child: Icon(Icons.star,color: colors[index%4],),
+          ),
+        );
+        return draggable;
+      },
+    );
+
+    return listView;
+  }
+
+  Widget _decorate(Widget child, {Color color = Colors.white}) {
+    return Container(
+      width: 30,
+      height: 30,
+      child: child,
+      decoration:
+      BoxDecoration(border: Border.all(color: color, width: 1)),
+    );
   }
 }

@@ -31,8 +31,12 @@ class _GeneralPageState extends State<GeneralPage> {
   bool nudge1=false;
   bool nudge2=false;
   bool lastCheckbox=false;
-  var controller=TextEditingController(text: "18-11-23");
+  bool flag=false;
+  var controller=TextEditingController(text: "19-11-23");
+  var signatureController=TextEditingController();
   var subjectController=TextEditingController();
+
+  List<String> signatures=[];
 
   @override
   Widget build(BuildContext context) {
@@ -614,56 +618,53 @@ class _GeneralPageState extends State<GeneralPage> {
              ),
              Divider(),
              //Nudges
-             SingleChildScrollView(
-               scrollDirection: Axis.horizontal,
-               child: Row(
-                 mainAxisAlignment: MainAxisAlignment.start,
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
-                   Column(children: [
-                     Text("Nudges:"),
-                     Text("Learn more",style: TextStyle(color: Color(0xFF3055cc),fontSize: 13),),
-                   ],
-                   ),
-                   SizedBox(width: 30,),
-                   Column(
-                     mainAxisAlignment: MainAxisAlignment.start,
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       Container(
-                         child: Row(
-                           children: [
-                             Checkbox(
-                               value: nudge1,
-                               onChanged: (value) {
-                                 setState(() {
-                                   nudge1 = value!;
-                                 });
-                               },
-                             ),
-                             Text("Suggest emails to reply to "),
-                             Text(" -Emails that you might have forgotten to respond to will appear at the top of your inbox",style: TextStyle(fontSize: 13,fontWeight: FontWeight.normal),),
-                           ],
-                         ),
-                       ),
-                       Row(
+             Row(
+               mainAxisAlignment: MainAxisAlignment.start,
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 Column(children: [
+                   Text("Nudges:"),
+                   Text("Learn more",style: TextStyle(color: Color(0xFF3055cc),fontSize: 13),),
+                 ],
+                 ),
+                 SizedBox(width: 30,),
+                 Column(
+                   mainAxisAlignment: MainAxisAlignment.start,
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                     Container(
+                       child: Row(
                          children: [
                            Checkbox(
-                             value: nudge2,
+                             value: nudge1,
                              onChanged: (value) {
                                setState(() {
-                                 nudge2 = value!;
+                                 nudge1 = value!;
                                });
                              },
                            ),
-                           Text("Suggest emails to follow up on"),
-                           Text(" -Sent emails that you might need to follow up on will appear at the top of your inbox",style: TextStyle(fontSize: 13,fontWeight: FontWeight.normal),),
+                           Text("Suggest emails to reply to "),
+                           Text(" -Emails that you might have forgotten to respond to will appear at the top of your inbox",style: TextStyle(fontSize: 13,fontWeight: FontWeight.normal),),
                          ],
                        ),
-                     ],
-                   )
-                 ],
-               ),
+                     ),
+                     Row(
+                       children: [
+                         Checkbox(
+                           value: nudge2,
+                           onChanged: (value) {
+                             setState(() {
+                               nudge2 = value!;
+                             });
+                           },
+                         ),
+                         Text("Suggest emails to follow up on"),
+                         Text(" -Sent emails that you might need to follow up on will appear at the top of your inbox",style: TextStyle(fontSize: 13,fontWeight: FontWeight.normal),),
+                       ],
+                     ),
+                   ],
+                 )
+               ],
              ),
              Divider(),
 
@@ -858,37 +859,34 @@ class _GeneralPageState extends State<GeneralPage> {
               ),
              Divider(),
              //create contacts
-             SingleChildScrollView(
-               scrollDirection: Axis.horizontal,
-               child: Row(
-                 children: [
-                   Column(
-                     mainAxisAlignment: MainAxisAlignment.start,
-                     children: [
-                       Text("Create contacts for auto-complete:"),
-                       SizedBox(height: 3,),
-                     ],
-                   ),
-                   SizedBox(width: 30,),
-                   Column(
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       RadioMenuButton(value: "1", groupValue: contact, onChanged: (val){
-                         setState(() {
-                           contact=val!;
-                         });
-                       }, child: Text("When I send a message to a new person, add them to Other Contacts ",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15),overflow: TextOverflow.ellipsis,maxLines: 1,)),
-                       RadioMenuButton(style: ButtonStyle(iconColor: MaterialStateProperty.all<Color>(Colors.blue), ),
-                           value: "2", groupValue: contact, onChanged: (val){
-                             setState(() {
-                               contact=val!;
-                             });
-                           }, child: Text("I'll add contacts myself",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
-                     ],
-                   ),
-                 ],
-               ),
+             Row(
+               children: [
+                 Column(
+                   mainAxisAlignment: MainAxisAlignment.start,
+                   children: [
+                     Text("Create contacts for auto-complete:"),
+                     SizedBox(height: 3,),
+                   ],
+                 ),
+                 SizedBox(width: 30,),
+                 Column(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                     RadioMenuButton(value: "1", groupValue: contact, onChanged: (val){
+                       setState(() {
+                         contact=val!;
+                       });
+                     }, child: Text("When I send a message to a new person, add them to Other Contacts ",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15),overflow: TextOverflow.ellipsis,maxLines: 1,)),
+                     RadioMenuButton(style: ButtonStyle(iconColor: MaterialStateProperty.all<Color>(Colors.blue), ),
+                         value: "2", groupValue: contact, onChanged: (val){
+                           setState(() {
+                             contact=val!;
+                           });
+                         }, child: Text("I'll add contacts myself",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 15))),
+                   ],
+                 ),
+               ],
              ),
              Divider(),
 
@@ -900,10 +898,260 @@ class _GeneralPageState extends State<GeneralPage> {
                   Text("	You can view and change your preferences here.",style: TextStyle(fontWeight: FontWeight.normal),)
                 ],
               ),
+             Divider(),
+
              //Signature
-
-
-
+             Row(
+               children: [
+                 Column(
+                   mainAxisAlignment: MainAxisAlignment.start,
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                     Text("Signature:"),
+                     SizedBox(height: 1,),
+                     Text("(appended at the end of all outgoing ",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
+                     Text("messages)",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 11),),
+                   ],
+                 ),
+                 SizedBox(width: 30,),
+                 signatures.length==0?Column(
+                   children: [
+                     Text("No Signature"),
+                     GestureDetector(
+                       onTap: (){
+                        _showDialog(context);
+                       },
+                       child: Container(
+                         margin: EdgeInsets.only(left: 30),
+                         height: 30,
+                         width: 150,
+                         decoration: BoxDecoration(border: Border.all(color:Colors.black26,),borderRadius: BorderRadius.circular(10)),
+                         child: Row(
+                           children: [
+                             SizedBox(width: 20,),
+                             Icon(Icons.add,color: Colors.blue,),
+                             Text("Create new"),
+                           ],
+                         ),
+                       ),
+                     ),
+                   ],
+                 )
+                 :Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                     Container(
+                       height: 200,
+                       width: 600,
+                       padding: EdgeInsets.all(16.0),
+                       child: Row(
+                         children: [
+                           // 40% width ListView
+                           Expanded(
+                             flex: 2,
+                             child: Container(
+                               decoration: BoxDecoration(border: Border.all(color:Colors.black26,),borderRadius: BorderRadius.all(Radius.elliptical(1, 2))),
+                               child: ListView.builder(
+                                 itemCount: signatures.length,
+                                 itemBuilder: (context,index){
+                                   return  Container(
+                                     margin:EdgeInsets.only(bottom: 3),
+                                     child: ListTile(
+                                       trailing: GestureDetector(
+                                           onTap: (){
+                                             setState(() {
+                                               signatures.removeAt(index);
+                                             });
+                                             setState(() {
+                                             });
+                                           },
+                                           child: Icon(Icons.delete,size: 17,)),
+                                       tileColor: Color(0xffe8eeff),
+                                       title: Text(signatures[index],style: TextStyle(fontSize: 13),),
+                                     ),
+                                   );
+                                 },
+                               ),
+                             ),
+                           ),
+                           Expanded(
+                             flex: 3,
+                             child: Column(
+                               children: [
+                                 Container(
+                                   height: 120,
+                                   decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
+                                   child: TextField(
+                                     controller:signatureController,
+                                     decoration: InputDecoration(
+                                      border: InputBorder.none
+                                     ),
+                                   ),
+                                 ), // Add some space between the TextField and Buttons
+                                 Expanded(
+                                   child: Container(
+                                     decoration: BoxDecoration(border: Border.all(color: Colors.black26)),
+                                     child: Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                       children: [
+                                         Card(
+                                           shape: RoundedRectangleBorder(),
+                                           child: Container(
+                                               height: 30,
+                                               width: 30,
+                                               child: Center(child: Text("U",style: TextStyle(fontWeight: FontWeight.bold),))),
+                                         ),
+                                         Card(
+                                           shape: RoundedRectangleBorder(),
+                                           child: Container(
+                                               height: 30,
+                                               width: 30,
+                                               child: Center(child: Text("A",style: TextStyle(fontWeight: FontWeight.bold),))),
+                                         ),
+                                         Card(
+                                           shape: RoundedRectangleBorder(),
+                                           child: Container(
+                                               height: 30,
+                                               width: 30,
+                                               child: Center(child: Icon(Icons.link))),
+                                         ),
+                                         Card(
+                                           shape: RoundedRectangleBorder(),
+                                           child: Container(
+                                               height: 30,
+                                               width: 30,
+                                               child: Center(child: Icon(Icons.image))),
+                                         ),
+                                         Card(
+                                           shape: RoundedRectangleBorder(),
+                                           child: Container(
+                                               height: 30,
+                                               width: 30,
+                                               child: Center(child: Icon(Icons.line_weight_sharp))),
+                                         ),
+                                         Card(
+                                           shape: RoundedRectangleBorder(),
+                                           child: Container(
+                                               height: 30,
+                                               width: 30,
+                                               child: Center(child: Icon(Icons.line_style_sharp))),
+                                         ),
+                                         Card(
+                                           shape: RoundedRectangleBorder(),
+                                           child: Container(
+                                               height: 30,
+                                               width: 30,
+                                               child: Center(child: Icon(Icons.format_quote))),
+                                         ),
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                         ],
+                       ),
+                     ),
+                     GestureDetector(
+                       onTap: (){
+                          if(signatureController.text.isNotEmpty){
+                            setState(() {
+                              print("Name:"+signatureController.text);
+                              signatures.add(signatureController.text);
+                              signatureController.text="";
+                            });
+                            setState(() {
+                            });
+                          }
+                       },
+                       child: Container(
+                         margin: EdgeInsets.only(left: 30),
+                         height: 30,
+                         width: 150,
+                         decoration: BoxDecoration(border: Border.all(color:Colors.black26,),borderRadius: BorderRadius.circular(10)),
+                         child: Row(
+                           children: [
+                             SizedBox(width: 20,),
+                             Icon(Icons.add,color: Colors.blue,),
+                             Text("Create new"),
+                           ],
+                         ),
+                       ),
+                     ),
+                     SizedBox(height: 30,),
+                     Container(
+                         padding: EdgeInsets.only(left:13,right:13),
+                         child: Text("Signature defaults")),
+                     SizedBox(height: 6,),
+                     Container(
+                       padding: EdgeInsets.only(left: 13,right: 13),
+                       child: Row(
+                         children: [
+                           Column(
+                             children: [
+                               Text("FOR NEW EMAIL USE",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 10),),
+                               DropdownButton(
+                                 value: selectedValue,
+                                 items: options.map((String value) {
+                                   return DropdownMenuItem(
+                                     value: value,
+                                     child: Text(value),
+                                   );
+                                 }).toList(),
+                                 onChanged: (newValue) {
+                                   setState(() {
+                                     selectedValue = newValue!;
+                                   });
+                                 },
+                               ),
+                             ],
+                           ),
+                           SizedBox(width: 30,),
+                           Column(
+                             children: [
+                               Text("FOR NEW EMAIL USE",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 10),),
+                               DropdownButton(
+                                 value: selectedValue,
+                                 items: options.map((String value) {
+                                   return DropdownMenuItem(
+                                     value: value,
+                                     child: Text(value),
+                                   );
+                                 }).toList(),
+                                 onChanged: (newValue) {
+                                   setState(() {
+                                     selectedValue = newValue!;
+                                   });
+                                 },
+                               ),
+                             ],
+                           ),
+                         ],
+                       ),
+                     ),
+                     SizedBox(height: 5,),
+                     Container(
+                       padding: EdgeInsets.only(left: 13,right: 13),
+                       child: Row(
+                         children: [
+                           Checkbox(
+                             value: flag,
+                             onChanged: (value) {
+                               setState(() {
+                                 flag = value!;
+                               });
+                             },
+                           ),
+                           Text("Insert signature before the quoted text in replies, and remove the '--' line that precedes it.",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 12),),
+                         ],
+                       ),
+                     )
+                   ],
+                 ),
+               ],
+             ),
+             Divider(),
              //personal indicator
              Row(
                children: [
@@ -1217,7 +1465,6 @@ class _GeneralPageState extends State<GeneralPage> {
         ),
       ),
     );
-
   }
   Widget _createContents(int n) {
     final listView = ListView.builder(
@@ -1248,4 +1495,57 @@ class _GeneralPageState extends State<GeneralPage> {
       BoxDecoration(border: Border.all(color: color, width: 1)),
     );
   }
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Name new Signature'),
+          content: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black, // Set the border color to black
+                width: 1.0, // Set the border width
+              ),
+              borderRadius: BorderRadius.circular(8.0), // Set border radius
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: TextField(
+                controller: signatureController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Signature name...',
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Add your logic for handling "Create" button press here
+               if(signatureController.text.isNotEmpty){
+                 setState(() {
+                   signatures.add(signatureController.text);
+                 });
+                 setState(() {
+                 });
+               }
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Create'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
+
